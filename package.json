@@ -1,0 +1,15 @@
+{
+  "name": "version-planner",
+  "private": true,
+  "version": "0.0.0",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "live-server": "^1.2.1"
+  },
+  "scripts": {
+    "postinstall": "npm run copy-libs",
+    "update-deps": "npm update",
+    "start": "live-server --no-browser --port=8000 ./app"
+  }
+}

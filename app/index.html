@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en" ng-app="myApp" class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>My AngularJS App</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="app.css">
+</head>
+<body>
+</body>
+<br>
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active " aria-current="page"><a href="#">Wersje zaplanowane na dziś</a></li>
+        </ol>
+    </nav>
+    <div class="row">
+        <div class=" col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title text-success"><i class="fa fa-star" aria-hidden="true"></i> 175
+
+                        <a href="#" class="btn-sm btn-primary pull-right"> <i class="fa  fa-paper-plane-o"
+                                                                              aria-hidden="true"></i>
+                            Zaplanuj kompilacje
+                        </a>
+                    </h5>
+                    <p class="card-text">
+                    <div class="container">
+                        <h5>Watchers (2):</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item"><i class="fa fa-user" aria-hidden="true"></i> Mirek 29.11.2019
+                                13:45 <a href="#"><i
+                                        class="fa fa-trash-o pull-right"
+                                        aria-hidden="true"></i></a>
+                            </li>
+                            <li class="list-group-item"><i class="fa fa-user" aria-hidden="true"></i> Daniel 29.11.2019
+                                13:47 <a href="#"> <i
+                                        class="fa fa-trash-o pull-right"
+                                        aria-hidden="true"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class=" col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">177</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's
+                        content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+        <div class=" col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">178</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's
+                        content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <br>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page"><a href="#">Wersje dostępne do kompilacji</a></li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class=" col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">175 <i class="fa fa-star" aria-hidden="true"></i></h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's
+                        content.</p>
+                    <a href="#" class="btn btn-primary"> <i class="fa  fa-paper-plane-o" aria-hidden="true"></i>
+                        Zaplanuj kompilacje
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class=" col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">177</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's
+                        content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+        <div class=" col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">178</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's
+                        content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--[if lt IE 7]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+    your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<div ng-view></div>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Angular Material style sheet -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--
+Your HTML content here
+-->
+
+<!-- Angular Material requires Angular.js Libraries -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-animate.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-aria.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-messages.min.js"></script>
+<script
+        src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous"></script>
+
+<script src="app.js"></script>
+</body>
+</html>
