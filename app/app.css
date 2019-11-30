@@ -1,25 +1,37 @@
-/* app css stylesheet */
-
-.menu {
-  list-style: none;
-  border-bottom: 0.1em solid black;
-  margin-bottom: 2em;
-  padding: 0 0 0.5em;
+.list-group-item:hover{
+  background-color:rgba(224, 215, 215, 0.253) !important;
+  cursor: pointer !important;
+}
+.card-body {
+  overflow-y: auto;
+  max-height: 300px;
+}
+.example-animate-container {
 }
 
-.menu:before {
-  content: "[";
+.animate-repeat {
+  line-height:30px;
+  list-style:none;
+  box-sizing:border-box;
 }
 
-.menu:after {
-  content: "]";
+.animate-repeat.ng-move,
+.animate-repeat.ng-enter,
+.animate-repeat.ng-leave {
+  transition:all linear 0.1s;
 }
 
-.menu > li {
-  display: inline;
+.animate-repeat.ng-leave.ng-leave-active,
+.animate-repeat.ng-move,
+.animate-repeat.ng-enter {
+  opacity:0;
+  max-height:0;
 }
 
-.menu > li + li:before {
-  content: "|";
-  padding-right: 0.3em;
+.animate-repeat.ng-leave,
+.animate-repeat.ng-move.ng-move-active,
+.animate-repeat.ng-enter.ng-enter-active {
+  opacity:1;
+  max-height:30px;
 }
+
