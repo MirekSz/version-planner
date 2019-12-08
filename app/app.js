@@ -1,8 +1,29 @@
 'use strict';
-
+function refreshUserName() {
+      var appElement = document.querySelector('[ng-app=myApp]');
+      var $scope = angular.element(appElement).scope();
+      $scope.$apply(function () {
+            $scope.user = localStorage.getItem('user');
+      });
+}
+function editUserName() {
+      $("#user-name").val(localStorage.getItem('user'));
+      $('#exampleModal').modal('toggle');
+}
 var app = angular.module('myApp', ['ngAnimate']);
+setTimeout(function () {
+      if (!localStorage.getItem('user')) {
+            editUserName();
+      } else {
+            refreshUserName();
+      }
+}, 500)
+function closeModal() {
+      localStorage.setItem('user', $("#user-name").val());
+      refreshUserName();
 
-
+      $('#exampleModal').modal('hide')
+}
 app.component('version', {
       templateUrl: '/version.html',
       controller: function VersionController() {
@@ -10,8 +31,11 @@ app.component('version', {
             }
 
             this.addWatcher = function () {
-                  this.data.watchers.push({ name: "Mirek", date: new Date() });
-                  this.callback(this.data);
+                  var user = this.user;
+                  if (_.findIndex(this.data.watchers, function (o) { return o.name == user; }) == -1) {
+                        this.data.watchers.push({ name: this.user, date: new Date() });
+                        this.callback(this.data);
+                  }
             }
             this.removeWatcher = function (index) {
                   this.data.watchers.splice(index, 1);
@@ -20,6 +44,7 @@ app.component('version', {
       }, bindings: {
             role: '@',
             data: '=',
+            user: '=',
             callback: '<'
       }
 });
@@ -29,7 +54,6 @@ app.controller('versionManager', function () {
       this.planned = [];
       var self = this;
       this.scoreChange = function (version) {
-            debugger
             if (version.watchers.length > 0) {
                   _.remove(self.avaliable, {
                         name: version.name

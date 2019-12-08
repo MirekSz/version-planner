@@ -17,7 +17,7 @@
             <ul class="list-group example-animate-container">
                   <li ng-repeat="w in $ctrl.data.watchers" class="animate-repeat list-group-item "><i class="fa fa-user"
                               aria-hidden="true"></i> {{w.name}}
-                        {{w.date | date:'dd HH:mm' }}
+                        {{w.date | date:'EEEE HH:mm' }}
                         <div class="pull-right">
                               <a href="#" ng-click="$ctrl.removeWatcher($index)"><i class="fa fa-trash-o  "
                                           aria-hidden="true"></i></a>

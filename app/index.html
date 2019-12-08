@@ -12,35 +12,41 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>My AngularJS App</title>
+    <title>VVR</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="app.css">
 </head>
 
 <body>
-    <br>
-    <div class="container" ng-controller="versionManager as $ctrl">
+    <div class="container" ng-controller="versionManager as $ctrl" style="margin-top:10px">
+        <a href="#" onclick="editUserName()">
+            <div class="pull-right">{{user}} <i class="fa fa-pencil" aria-hidden="true"></i></div>
+        </a>
+        <h3 class="text-muted font-italic font-weight-bold ">
+            <i class="fa fa-blind"></i> Verto Version Releaser
+        </h3>
+        <hr>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item active " aria-current="page"><a href="#">Wersje zaplanowane na dziś</a></li>
+                <li class="breadcrumb-item active " aria-current="page"><i class="fa fa-paper-plane"
+                        aria-hidden="true"></i> Wersje zaplanowane na dziś</li>
             </ol>
         </nav>
         <div class="row">
-            <planned class="example-animate-container" />
+            <planned class="example-animate-container" user={{user}} />
         </div>
 
         <br>
         <br>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item active" aria-current="page"><a href="#">Wersje dostępne do kompilacji</a>
-                </li>
+                <li class="breadcrumb-item active" aria-current="page"><i class="fa fa-search" aria-hidden="true"></i>
+                    Wersje dostępne do kompilacji </li>
             </ol>
         </nav>
-
         <div class="row">
-            <avaliable class="example-animate-container" />
+            <avaliable class="example-animate-container" user={{user}} />
         </div>
     </div>
     <!--[if lt IE 7]>
@@ -66,7 +72,36 @@ Your HTML content here
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.min.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
     <script src="app.js"></script>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Enter user name</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Name:</label>
+                            <input placeholder="np. MirekSz" type="text" class="form-control" id="user-name">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="closeModal()" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

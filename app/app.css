@@ -1,3 +1,7 @@
+.breadcrumb{
+  padding:.25rem .6rem !important;
+}
+
 .list-group-item:hover{
   background-color:rgba(224, 215, 215, 0.253) !important;
   cursor: pointer !important;
