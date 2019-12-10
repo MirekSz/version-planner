@@ -1,28 +1,26 @@
 <div class="card">
-      <div class="card-body">
-            <a ng-if="$ctrl.role != 'release'" href="#" ng-click="$ctrl.addWatcher()"
-                  class="btn-sm btn-primary pull-right"> <i class="fa  fa-paper-plane-o" aria-hidden="true"></i>
-                  Dodaj
-            </a>
-            <a ng-if="$ctrl.role == 'release'" href="#" ng-click="$ctrl.addWatcher()"
-                  class="btn-sm btn-primary pull-right"> <i class="fa  fa-thumbs-up" aria-hidden="true"></i>
-            </a>
-            <div class="card-title">
-                  <h5 ng-class="{'text-success': $ctrl.role == 'release'}"><i class="fa fa-star" aria-hidden="true"></i>
-                        {{$ctrl.data.name}}
-                        ({{$ctrl.data.watchers.length}})
-                  </h5>
-            </div>
+    <div class="card-body">
+        <a ng-if="$ctrl.voted" href="#" ng-click="$ctrl.addWatcher()"
+           class="btn-sm btn-primary pull-right"> <i class="fa  fa-thumbs-up" aria-hidden="true"></i>
+        </a>
+        <a ng-if="!$ctrl.voted" href="#" ng-click="$ctrl.removeCurrentWatcher()"
+           class="btn-sm btn-primary pull-right"> <i class="fa  fa-thumbs-down" aria-hidden="true"></i>
+        </a>
+        <div class="card-title">
+            <h5 ng-class="{'text-success': $ctrl.role == 'release'}"><i class="fa fa-star" aria-hidden="true"></i>
+                {{$ctrl.data.name}}
+                ({{$ctrl.data.watchers.length}})
+            </h5>
+        </div>
 
-            <ul class="list-group example-animate-container">
-                  <li ng-repeat="w in $ctrl.data.watchers" class="animate-repeat list-group-item "><i class="fa fa-user"
-                              aria-hidden="true"></i> {{w.name}}
-                        {{w.date | date:'EEEE HH:mm' }}
-                        <div class="pull-right">
-                              <a href="#" ng-click="$ctrl.removeWatcher($index)"><i class="fa fa-trash-o  "
-                                          aria-hidden="true"></i></a>
-                        </div>
-                  </li>
-            </ul>
-      </div>
+        <ul class="list-group example-animate-container">
+            <li ng-repeat="w in $ctrl.data.watchers" class="animate-repeat list-group-item "><i class="fa fa-user"
+                                                                                                aria-hidden="true"></i>
+                {{w.name}}
+                <div class="pull-right">
+                    {{w.date | date:'EEEE HH:mm' }}
+                </div>
+            </li>
+        </ul>
+    </div>
 </div>
