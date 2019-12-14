@@ -1,10 +1,10 @@
 <div class="card">
     <div class="card-body">
-        <a ng-if="$ctrl.data.voted" href="#" ng-click="$ctrl.addWatcher()"
-           class="btn-sm btn-primary pull-right"> <i class="fa  fa-thumbs-up" aria-hidden="true"></i>
+        <a ng-if="$ctrl.data.voted" href="#" ng-click="$ctrl.addWatcher()" class="btn-sm btn-primary pull-right"> <i
+                class="fa  fa-thumbs-up" aria-hidden="true"></i>
         </a>
         <a ng-if="!$ctrl.data.voted" href="#" ng-click="$ctrl.removeCurrentWatcher()"
-           class="btn-sm btn-primary pull-right"> <i class="fa  fa-thumbs-down" aria-hidden="true"></i>
+            class="btn-sm btn-primary pull-right"> <i class="fa  fa-thumbs-down" aria-hidden="true"></i>
         </a>
         <div class="card-title">
             <h5 ng-class="{'text-success': $ctrl.role == 'release'}"><i class="fa fa-star" aria-hidden="true"></i>
@@ -15,8 +15,8 @@
 
         <ul class="list-group example-animate-container">
             <li ng-repeat="w in $ctrl.data.watchers" class="animate-repeat list-group-item "><i class="fa fa-user"
-                                                                                                aria-hidden="true"></i>
-                {{w.name}}
+                    aria-hidden="true"></i>
+                {{w.user.name}}
                 <div class="pull-right">
                     {{w.date | date:'EEEE HH:mm' }}
                 </div>

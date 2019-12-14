@@ -1,10 +1,10 @@
 'use strict';
 
 function refreshUserName() {
-    var appElement = document.querySelector('[ng-app=myApp]');
+    var appElement = document.querySelector('[id=app]');
     var $scope = angular.element(appElement).scope();
     $scope.$apply(function () {
-        $scope.user = localStorage.getItem('user');
+        $scope.user.name = localStorage.getItem('user');
     });
 }
 
@@ -34,8 +34,8 @@ app.component('version', {
     controller: function VersionController($scope) {
         this.addWatcher = function () {
             var user = this.user;
-            if (_.findIndex(this.data.watchers, (o) => o.name == user) == -1) {
-                this.data.watchers.push({name: this.user, date: new Date()});
+            if (_.findIndex(this.data.watchers, (o) => o.user.name == user.name) == -1) {
+                this.data.watchers.push({ user: this.user, date: new Date() });
                 this.callback(this.data);
             }
         };
@@ -44,7 +44,7 @@ app.component('version', {
             this.callback(this.data);
         };
         this.removeCurrentWatcher = function (index) {
-            this.data.watchers.splice(_.findIndex(this.data.watchers, (o) => o.name == $scope.user), 1);
+            this.data.watchers.splice(_.findIndex(this.data.watchers, (o) => o.name == $scope.$ctrl.user.name), 1);
             this.callback(this.data);
         };
     }, bindings: {
@@ -55,24 +55,25 @@ app.component('version', {
     }
 });
 
-var INIT = [{name: 175, watchers: []}, {name: 177, watchers: []}, {name: 178, watchers: []}, {name: 179, watchers: []}];
+var INIT = [{ name: 175, watchers: [] }, { name: 177, watchers: [] }, { name: 178, watchers: [] }, { name: 179, watchers: [] }];
 app.controller('versionManager', function ($http, $scope, $timeout) {
     var self = this;
     $scope.$watch('user', function () {
         if ($scope.user) {
             var all = [].concat(self.avaliable).concat(self.planned);
+            debugger
             for (let o of all) {
-                o.voted = _.findIndex(o.watchers, (o) => o.name == self.user) == -1
+                o.voted = _.findIndex(o.watchers, (o) => o.user.name == self.user.name) == -1
             }
         }
     });
     this.$onInit = function () {
-        $scope.user = localStorage.getItem('user');
+        $scope.user = { "name": localStorage.getItem('user') };
         $http.get('http://localhost:8080/vp/vote/list').then(function successCallback(response) {
             for (let d of response.data) {
                 let find = _.find(self.avaliable, (o) => o.name == d.version);
                 if (find)
-                    find.watchers.push({name: d.login, date: d.date});
+                    find.watchers.push({ name: d.login, date: d.date });
             }
             self.avaliable.forEach(self.scoreChange);
         }, function errorCallback(response) {
@@ -101,13 +102,13 @@ app.controller('versionManager', function ($http, $scope, $timeout) {
             if (_.findIndex(self.avaliable, (o) => o.name == version.name) == -1)
                 self.avaliable.push(version);
         }
-        version.voted = _.findIndex(version.watchers, (o) => o.name == $scope.user) == -1
+        version.voted = _.findIndex(version.watchers, (o) => o.user.name == $scope.user.name) == -1
 
     };
 });
 app.directive('avaliable', function () {
-    return {restrict: 'E', templateUrl: '/avaliable.html', replace: true};
+    return { restrict: 'E', templateUrl: '/avaliable.html', replace: true };
 });
 app.directive('planned', function () {
-    return {restrict: 'E', templateUrl: '/planned.html', replace: true};
+    return { restrict: 'E', templateUrl: '/planned.html', replace: true };
 });
