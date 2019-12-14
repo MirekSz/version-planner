@@ -1,9 +1,9 @@
 <div class="card">
     <div class="card-body">
-        <a ng-if="$ctrl.voted" href="#" ng-click="$ctrl.addWatcher()"
+        <a ng-if="$ctrl.data.voted" href="#" ng-click="$ctrl.addWatcher()"
            class="btn-sm btn-primary pull-right"> <i class="fa  fa-thumbs-up" aria-hidden="true"></i>
         </a>
-        <a ng-if="!$ctrl.voted" href="#" ng-click="$ctrl.removeCurrentWatcher()"
+        <a ng-if="!$ctrl.data.voted" href="#" ng-click="$ctrl.removeCurrentWatcher()"
            class="btn-sm btn-primary pull-right"> <i class="fa  fa-thumbs-down" aria-hidden="true"></i>
         </a>
         <div class="card-title">

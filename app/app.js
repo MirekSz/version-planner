@@ -31,12 +31,7 @@ function closeModal() {
 
 app.component('version', {
     templateUrl: '/version.html',
-    controller: function VersionController() {
-        this.$onInit = function () {
-            var user = this.user;
-            this.voted = _.findIndex(this.data.watchers, (o) => o.name == user) == -1;
-        };
-
+    controller: function VersionController($scope) {
         this.addWatcher = function () {
             var user = this.user;
             if (_.findIndex(this.data.watchers, (o) => o.name == user) == -1) {
@@ -49,7 +44,7 @@ app.component('version', {
             this.callback(this.data);
         };
         this.removeCurrentWatcher = function (index) {
-            this.data.watchers.splice(index, 1);
+            this.data.watchers.splice(_.findIndex(this.data.watchers, (o) => o.name == $scope.user), 1);
             this.callback(this.data);
         };
     }, bindings: {
@@ -60,13 +55,35 @@ app.component('version', {
     }
 });
 
-app.controller('versionManager', function () {
-    this.avaliable = [{name: 175, watchers: []}, {name: 177, watchers: []}, {name: 178, watchers: []}];
-    this.planned = [];
+var INIT = [{name: 175, watchers: []}, {name: 177, watchers: []}, {name: 178, watchers: []}, {name: 179, watchers: []}];
+app.controller('versionManager', function ($http, $scope, $timeout) {
     var self = this;
+    $scope.$watch('user', function () {
+        if ($scope.user) {
+            var all = [].concat(self.avaliable).concat(self.planned);
+            for (let o of all) {
+                o.voted = _.findIndex(o.watchers, (o) => o.name == self.user) == -1
+            }
+        }
+    });
+    this.$onInit = function () {
+        $scope.user = localStorage.getItem('user');
+        $http.get('http://localhost:8080/vp/vote/list').then(function successCallback(response) {
+            for (let d of response.data) {
+                let find = _.find(self.avaliable, (o) => o.name == d.version);
+                if (find)
+                    find.watchers.push({name: d.login, date: d.date});
+            }
+            self.avaliable.forEach(self.scoreChange);
+        }, function errorCallback(response) {
+        });
+    };
+
+    this.avaliable = [].concat(INIT);
+    this.planned = [];
     this.release = function () {
         this.planned = [];
-        this.avaliable = [{name: 175, watchers: []}, {name: 177, watchers: []}, {name: 178, watchers: []}];
+        this.avaliable = [].concat(INIT);
     };
     this.scoreChange = function (version) {
         if (version.watchers.length > 0) {
@@ -81,8 +98,11 @@ app.controller('versionManager', function () {
             _.remove(self.planned, {
                 name: version.name
             });
-            self.avaliable.push(version);
+            if (_.findIndex(self.avaliable, (o) => o.name == version.name) == -1)
+                self.avaliable.push(version);
         }
+        version.voted = _.findIndex(version.watchers, (o) => o.name == $scope.user) == -1
+
     };
 });
 app.directive('avaliable', function () {
