@@ -16,15 +16,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/vote", produces = MediaType.APPLICATION_JSON_VALUE)
-@CrossOrigin(origins = "*")
+@CrossOrigin
 public class VoteRestController {
 
 	@Autowired
 	VoteRepo repo;
 
-	@PostMapping("/add")
+	@PostMapping
 	public void add(final @RequestBody @Valid Vote vote) {
-		repo.save(vote);
+		Vote findByLoginAndVersion = repo.findByLoginAndVersion(vote.getLogin(), vote.getVersion());
+		if (findByLoginAndVersion == null)
+			repo.save(vote);
+	}
+
+	@PostMapping("/delete")
+	public void delete(final @RequestBody @Valid Vote vote) {
+		Vote findByLoginAndVersion = repo.findByLoginAndVersion(vote.getLogin(), vote.getVersion());
+		repo.save(findByLoginAndVersion);
 	}
 
 	@GetMapping("/list")

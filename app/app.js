@@ -61,7 +61,6 @@ app.controller('versionManager', function ($http, $scope, $timeout) {
     $scope.$watch('user', function () {
         if ($scope.user) {
             var all = [].concat(self.avaliable).concat(self.planned);
-            debugger
             for (let o of all) {
                 o.voted = _.findIndex(o.watchers, (o) => o.user.name == self.user.name) == -1
             }
@@ -73,7 +72,7 @@ app.controller('versionManager', function ($http, $scope, $timeout) {
             for (let d of response.data) {
                 let find = _.find(self.avaliable, (o) => o.name == d.version);
                 if (find)
-                    find.watchers.push({ name: d.login, date: d.date });
+                    find.watchers.push({ user: { name: d.login }, date: d.date });
             }
             self.avaliable.forEach(self.scoreChange);
         }, function errorCallback(response) {
@@ -103,6 +102,11 @@ app.controller('versionManager', function ($http, $scope, $timeout) {
                 self.avaliable.push(version);
         }
         version.voted = _.findIndex(version.watchers, (o) => o.user.name == $scope.user.name) == -1
+        if (version.voted) {
+            $http.post('http://localhost:8080/vp/vote', { version: version.name, login: $scope.user.name });
+        } else {
+            $http.post('http://localhost:8080/vp/vote/delete', { version: version.name, login: $scope.user.name });
+        }
 
     };
 });

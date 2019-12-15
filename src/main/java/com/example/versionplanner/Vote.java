@@ -3,7 +3,6 @@ package com.example.versionplanner;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,7 +16,6 @@ public class Vote {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	@Column(unique = true)
 	private String login;
 	private String version;
 	private LocalDateTime date;

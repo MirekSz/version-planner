@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface VoteRepo extends JpaRepository<Vote, Long> {
-
+	Vote findByLoginAndVersion(String login, String version);
 }
