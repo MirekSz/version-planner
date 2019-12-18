@@ -13,7 +13,7 @@ function editUserName() {
     $('#exampleModal').modal('toggle');
 }
 
-var app = angular.module('myApp', ['ngAnimate']);
+var app = angular.module('myApp', ['angular-loading-bar', 'ngAnimate']);
 setTimeout(function () {
     if (!localStorage.getItem('user')) {
         editUserName();
@@ -42,7 +42,7 @@ app.component('version', {
     }
 });
 
-var INIT = [{name: 175, watchers: []}, {name: 177, watchers: []}, {name: 178, watchers: []}, {name: 179, watchers: []}];
+var INIT = [{ name: 175, watchers: [] }, { name: 177, watchers: [] }, { name: 178, watchers: [] }, { name: 179, watchers: [] }];
 app.controller('versionManager', function ($http, $scope, $timeout) {
     var self = this;
     $scope.$watch('user', function () {
@@ -54,14 +54,13 @@ app.controller('versionManager', function ($http, $scope, $timeout) {
         }
     });
     this.$onInit = function () {
-        $scope.user = {"name": localStorage.getItem('user')};
+        $scope.user = { "name": localStorage.getItem('user') };
         this.reloadVotes();
     };
     this.reloadVotes = function () {
         self.planned = [];
         self.avaliable = JSON.parse(JSON.stringify(INIT));
         $http.get('http://localhost:8080/vp/vote/list').then(function successCallback(response) {
-            debugger;
             for (let d of response.data) {
                 let find = _.find([].concat(self.avaliable).concat(self.planned), (o) => o.name == d.version);
                 if (find)
@@ -74,7 +73,7 @@ app.controller('versionManager', function ($http, $scope, $timeout) {
     this.avaliable = JSON.parse(JSON.stringify(INIT));
     this.planned = [];
     this.releaseVersion = function (version) {
-        $http.post('http://localhost:8080/vp/vote/releaseVersion', {version: version}).then(self.reloadVotes);
+        $http.post('http://localhost:8080/vp/vote/releaseVersion', { version: version }).then(self.reloadVotes);
     };
     this.releaseAll = function () {
         $http.post('http://localhost:8080/vp/vote/releaseAll').then(self.reloadVotes);
@@ -82,7 +81,7 @@ app.controller('versionManager', function ($http, $scope, $timeout) {
     this.addWatcher = function (version, userName, voteType) {
         let user = userName != null ? userName : $scope.user.name;
         if (_.findIndex(version.watchers, (o) => o.user.name == user) == -1) {
-            version.watchers.push({user: {name: user}, date: new Date()});
+            version.watchers.push({ user: { name: user }, date: new Date() });
             if (version.watchers.length == 1) {
                 _.remove(self.avaliable, {
                     name: version.name
@@ -107,16 +106,16 @@ app.controller('versionManager', function ($http, $scope, $timeout) {
         let vote = _.find(version.watchers, (o) => o.user.name == $scope.user.name);
         version.voted = vote != undefined;
         if (voteType === 'up') {
-            $http.post('http://localhost:8080/vp/vote', {version: version.name, login: $scope.user.name});
+            $http.post('http://localhost:8080/vp/vote', { version: version.name, login: $scope.user.name });
         } else if (voteType === 'down') {
-            $http.post('http://localhost:8080/vp/vote/delete', {version: version.name, login: $scope.user.name});
+            $http.post('http://localhost:8080/vp/vote/delete', { version: version.name, login: $scope.user.name });
         }
 
     };
 });
 app.directive('avaliable', function () {
-    return {restrict: 'E', templateUrl: '/avaliable.html', replace: true};
+    return { restrict: 'E', templateUrl: '/avaliable.html', replace: true };
 });
 app.directive('planned', function () {
-    return {restrict: 'E', templateUrl: '/planned.html', replace: true};
+    return { restrict: 'E', templateUrl: '/planned.html', replace: true };
 });
