@@ -1,3 +1,4 @@
 <div class=" col-sm-4 animate-repeat" ng-repeat="a in $ctrl.avaliable | orderBy:'name' ">
-      <version user="user" data="a" callback="$ctrl.scoreChange"></version>
+    <version user="user" data="a" add="$ctrl.addWatcher" remove="$ctrl.removeWatcher"
+    ></version>
 </div>
