@@ -1,4 +1,4 @@
-<div class=" col-sm-6 col-xl-4 animate-repeat" ng-repeat="a in $ctrl.planned |orderBy : 'name' track by a.name">
+<div class=" col-sm-12 col-xl-4 animate-repeat" ng-repeat="a in $ctrl.planned |orderBy : 'name' track by a.name">
     <version user="user" data="a" role="release" add="$ctrl.addWatcher" remove="$ctrl.removeWatcher"
              release="$ctrl.releaseVersion"></version>
 </div>

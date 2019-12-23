@@ -3,7 +3,7 @@
         <div class="pull-left">
             <h5 ng-class="{'text-success': $ctrl.role == 'release'} "><i class="fa  fa-star" aria-hidden="true"></i>
                 {{$ctrl.data.name}}
-                ({{$ctrl.data.watchers.length}})
+                <span ng-if="$ctrl.data.watchers.length">  ({{$ctrl.data.watchers.length}})</span>
             </h5>
         </div>
         <a ng-if="!$ctrl.data.voted" href="#" ng-click="$ctrl.add($ctrl.data,null, 'up')"
