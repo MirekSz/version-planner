@@ -7,21 +7,21 @@
             </h5>
         </div>
         <a ng-if="!$ctrl.data.voted" href="#" ng-click="$ctrl.add($ctrl.data,null, 'up')"
-            class="btn-sm btn-primary align-middle pull-right"> <i class="fa  fa-thumbs-up" aria-hidden="true"></i>
+           class="btn-sm btn-primary align-middle pull-right"> <i class="fa  fa-thumbs-up" aria-hidden="true"></i>
         </a>
 
         <a ng-if="$ctrl.data.voted" href="#" ng-click="$ctrl.remove($ctrl.data,null, 'down')"
-            class="btn-sm btn-primary align-middle pull-right"> <i class="fa  fa-thumbs-down" aria-hidden="true"></i>
+           class="btn-sm btn-primary align-middle pull-right"> <i class="fa  fa-thumbs-down" aria-hidden="true"></i>
         </a>
 
         <a href="#" ng-if="$ctrl.data.watchers.length>0" ng-click="$ctrl.release($ctrl.data.name)"
-            class="btn-sm btn-primary align-middle pull-right marg"> <i class="fa  fa-plane" aria-hidden="true"></i>
+           class="btn-sm btn-primary align-middle pull-right marg"> <i class="fa  fa-plane" aria-hidden="true"></i>
         </a>
     </div>
-    <div class="card-body">
+    <div class="card-body" ng-if="$ctrl.data.watchers.length > 0">
         <ul class="list-group example-animate-container">
             <li ng-repeat="w in $ctrl.data.watchers" class="animate-repeat list-group-item "><i class="fa fa-user"
-                    aria-hidden="true"></i>
+                                                                                                aria-hidden="true"></i>
                 {{w.user.name}}
                 <div class="pull-right">
                     {{w.date | date:'EEEE HH:mm' }}
