@@ -49,7 +49,7 @@ app.factory('apiService', function ($http) {
     };
     var addVersion = function (name) {
         return new Promise(function (res, rej) {
-            $http.post('http://localhost:8080/vp/version', {name: name}).then(res);
+            $http.post('http://localhost:8080/vp/version', { name: name }).then(res);
         });
     };
     var getVotes = function () {
@@ -61,7 +61,7 @@ app.factory('apiService', function ($http) {
     };
     var releaseVersion = function (version) {
         return new Promise(function (res, rej) {
-            $http.post('http://localhost:8080/vp/vote/releaseVersion', {version: version}).then(res);
+            $http.post('http://localhost:8080/vp/vote/releaseVersion', { version: version }).then(res);
         });
     };
     var releaseAll = function () {
@@ -71,15 +71,15 @@ app.factory('apiService', function ($http) {
     };
     var addVote = function (version, login) {
         return new Promise(function (res, rej) {
-            $http.post('http://localhost:8080/vp/vote', {version: version, login: login}).then(res);
+            $http.post('http://localhost:8080/vp/vote', { version: version, login: login }).then(res);
         });
     };
     var deleteVote = function (version, login) {
         return new Promise(function (res, rej) {
-            $http.post('http://localhost:8080/vp/vote/delete', {version: version, login: login}).then(res);
+            $http.post('http://localhost:8080/vp/vote/delete', { version: version, login: login }).then(res);
         });
     };
-    return {getLastVersions, getVotes, getVersions, releaseVersion, releaseAll, addVote, deleteVote, addVersion};
+    return { getLastVersions, getVotes, getVersions, releaseVersion, releaseAll, addVote, deleteVote, addVersion };
 });
 
 app.component('version', {
@@ -115,7 +115,7 @@ app.controller('versionManager', function ($http, $scope, $timeout, apiService) 
         }
     });
     this.$onInit = function () {
-        $scope.user = {"name": localStorage.getItem('user')};
+        $scope.user = { "name": localStorage.getItem('user') };
         this.reloadVotes();
     };
     this.reloadVotes = function () {
@@ -140,15 +140,19 @@ app.controller('versionManager', function ($http, $scope, $timeout, apiService) 
     this.avaliable = [];
     this.planned = [];
     this.releaseVersion = function (version) {
-        apiService.releaseVersion(version.name).then(self.reloadVotes);
+        confirm().then(function () {
+            apiService.releaseVersion(version.name).then(self.reloadVotes);
+        })
     };
     this.releaseAll = function () {
-        apiService.releaseAll().then(self.reloadVotes);
+        confirm().then(function () {
+            apiService.releaseAll().then(self.reloadVotes);
+        })
     };
     this.addWatcher = function (version, userName, voteType) {
         let user = userName != null ? userName : $scope.user.name;
         if (_.findIndex(version.watchers, (o) => o.user.name == user) == -1) {
-            version.watchers.push({user: {name: user}, date: new Date()});
+            version.watchers.push({ user: { name: user }, date: new Date() });
             if (version.watchers.length == 1) {
                 _.remove(self.avaliable, {
                     name: version.name
@@ -189,17 +193,35 @@ app.controller('versionManager', function ($http, $scope, $timeout, apiService) 
             showCancelButton: true
         }).then(function (data) {
             if (data.value) {
-                apiService.addVersion(data.value).then(function () {
-                    self.avaliable.push({name: data.value, watchers: []});
-                })
+                apiService.addVersion(data.value).then(self.reloadVotes)
             }
         })
     }
 });
+
+
 app.directive('avaliable', function () {
-    return {restrict: 'E', templateUrl: '/avaliable.html', replace: true};
+    return { restrict: 'E', templateUrl: '/avaliable.html', replace: true };
 });
 app.directive('planned', function () {
-    return {restrict: 'E', templateUrl: '/planned.html', replace: true};
+    return { restrict: 'E', templateUrl: '/planned.html', replace: true };
 });
 
+function confirm() {
+    return new Promise(function (res, rej) {
+        Swal.fire({
+            title: 'Are you sure?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, release it!'
+        }).then((result) => {
+            if (result.value) {
+                res();
+            } else {
+                rej();
+            }
+        })
+    })
+}
