@@ -23,6 +23,8 @@ public class VersionRestController {
 
 	@Autowired
 	VersionRepo repo;
+	@Autowired
+	VersionReleaseService service;
 
 	@PostConstruct
 	@Scheduled(fixedDelay = 60000)
@@ -46,4 +48,13 @@ public class VersionRestController {
 		return repo.findAll();
 	}
 
+	@PostMapping("/releaseVersion")
+	public void deleteVersion(final @RequestBody @Valid Vote vote) throws Exception {
+		service.releaseVersion(vote.getVersion());
+	}
+
+	@PostMapping("/releaseAll")
+	public void deleteAll() throws Exception {
+		service.releaseAll();
+	}
 }

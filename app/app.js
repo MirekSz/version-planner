@@ -49,7 +49,7 @@ app.factory('apiService', function ($http) {
     };
     var addVersion = function (name) {
         return new Promise(function (res, rej) {
-            $http.post('http://localhost:8080/vp/version', { name: name }).then(res);
+            $http.post('http://localhost:8080/vp/version', {name: name}).then(res);
         });
     };
     var getVotes = function () {
@@ -61,25 +61,25 @@ app.factory('apiService', function ($http) {
     };
     var releaseVersion = function (version) {
         return new Promise(function (res, rej) {
-            $http.post('http://localhost:8080/vp/vote/releaseVersion', { version: version }).then(res);
+            $http.post('http://localhost:8080/vp/version/releaseVersion', {version: version}).then(res);
         });
     };
     var releaseAll = function () {
         return new Promise(function (res, rej) {
-            $http.post('http://localhost:8080/vp/vote/releaseAll').then(res);
+            $http.post('http://localhost:8080/vp/version/releaseAll').then(res);
         });
     };
     var addVote = function (version, login) {
         return new Promise(function (res, rej) {
-            $http.post('http://localhost:8080/vp/vote', { version: version, login: login }).then(res);
+            $http.post('http://localhost:8080/vp/vote', {version: version, login: login}).then(res);
         });
     };
     var deleteVote = function (version, login) {
         return new Promise(function (res, rej) {
-            $http.post('http://localhost:8080/vp/vote/delete', { version: version, login: login }).then(res);
+            $http.post('http://localhost:8080/vp/vote/delete', {version: version, login: login}).then(res);
         });
     };
-    return { getLastVersions, getVotes, getVersions, releaseVersion, releaseAll, addVote, deleteVote, addVersion };
+    return {getLastVersions, getVotes, getVersions, releaseVersion, releaseAll, addVote, deleteVote, addVersion};
 });
 
 app.component('version', {
@@ -94,12 +94,29 @@ app.component('version', {
         release: '<'
     }
 });
+
+app.filter('humanTime', function () {
+    return function (input) {
+        return moment.duration(moment(input).diff(moment())).humanize();
+    };
+});
+
 app.component('history', {
     templateUrl: '/history.html',
     controller: function HistoryController($http, $scope, apiService) {
         this.$onInit = function () {
             apiService.getLastVersions().then(function (res) {
                 $scope.history = res;
+            });
+        };
+    }
+});
+app.component('current', {
+    templateUrl: '/current.html',
+    controller: function CurrentController($http, $scope, apiService) {
+        this.$onInit = function () {
+            apiService.getVersions().then(function (res) {
+                $scope.current = res.filter((e) => e.state === 'RUNNING');
             });
         };
     }
@@ -115,7 +132,7 @@ app.controller('versionManager', function ($http, $scope, $timeout, apiService) 
         }
     });
     this.$onInit = function () {
-        $scope.user = { "name": localStorage.getItem('user') };
+        $scope.user = {"name": localStorage.getItem('user')};
         this.reloadVotes();
     };
     this.reloadVotes = function () {
@@ -126,14 +143,16 @@ app.controller('versionManager', function ($http, $scope, $timeout, apiService) 
                 el.watchers = [];
                 return el;
             });
-        });
-        apiService.getVotes().then(function successCallback(response) {
-            for (let d of response) {
-                let find = _.find([].concat(self.avaliable).concat(self.planned), (o) => o.name == d.version);
-                if (find)
-                    self.addWatcher(find, d.login)
-            }
-        }, function errorCallback(response) {
+        }).then(function () {
+            apiService.getVotes().then(function successCallback(response) {
+                for (let d of response) {
+                    let find = _.find([].concat(self.avaliable).concat(self.planned), (o) => o.name == d.version);
+                    if (find) {
+                        self.addWatcher(find, d.login)
+                    }
+                }
+            }, function errorCallback(response) {
+            });
         });
     };
 
@@ -141,7 +160,7 @@ app.controller('versionManager', function ($http, $scope, $timeout, apiService) 
     this.planned = [];
     this.releaseVersion = function (version) {
         confirm().then(function () {
-            apiService.releaseVersion(version.name).then(self.reloadVotes);
+            apiService.releaseVersion(version).then(self.reloadVotes);
         })
     };
     this.releaseAll = function () {
@@ -152,7 +171,8 @@ app.controller('versionManager', function ($http, $scope, $timeout, apiService) 
     this.addWatcher = function (version, userName, voteType) {
         let user = userName != null ? userName : $scope.user.name;
         if (_.findIndex(version.watchers, (o) => o.user.name == user) == -1) {
-            version.watchers.push({ user: { name: user }, date: new Date() });
+
+            version.watchers.push({user: {name: user}, date: new Date()});
             if (version.watchers.length == 1) {
                 _.remove(self.avaliable, {
                     name: version.name
@@ -201,10 +221,10 @@ app.controller('versionManager', function ($http, $scope, $timeout, apiService) 
 
 
 app.directive('avaliable', function () {
-    return { restrict: 'E', templateUrl: '/avaliable.html', replace: true };
+    return {restrict: 'E', templateUrl: '/avaliable.html', replace: true};
 });
 app.directive('planned', function () {
-    return { restrict: 'E', templateUrl: '/planned.html', replace: true };
+    return {restrict: 'E', templateUrl: '/planned.html', replace: true};
 });
 
 function confirm() {

@@ -20,6 +20,13 @@ public class Vote {
 	private String version;
 	private LocalDateTime date;
 
+	public Vote() {
+	}
+
+	public Vote(final String version) {
+		this.version = version;
+	}
+
 	public Long getId() {
 		return id;
 	}

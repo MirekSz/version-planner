@@ -1,20 +1,27 @@
 <div class="card">
     <div class="card-header">
         <div class="pull-left">
-            <h5 ng-class="{'text-success': $ctrl.role == 'release'} "><i class="fa  fa-star" aria-hidden="true"></i>
+            <h5 ng-class="{'text-danger': $ctrl.data.state == 'ERROR','text-primary': $ctrl.data.state == 'RUNNING'} ">
+                <i
+                        class="fa  fa-star" aria-hidden="true" ng-if="$ctrl.data.state != 'RUNNING'"></i>
+                <i
+                        class="fa fa-spinner  fa-spin" aria-hidden="true" ng-if="$ctrl.data.state == 'RUNNING'"></i>
                 {{$ctrl.data.name}}
                 <span ng-if="$ctrl.data.watchers.length">  ({{$ctrl.data.watchers.length}})</span>
             </h5>
         </div>
-        <a ng-if="!$ctrl.data.voted" href="#" ng-click="$ctrl.add($ctrl.data,null, 'up')"
+        <a ng-if="!$ctrl.data.voted && $ctrl.data.state != 'RUNNING'" href="#"
+           ng-click="$ctrl.add($ctrl.data,null, 'up')"
            class="btn-sm btn-primary align-middle pull-right"> <i class="fa  fa-thumbs-up" aria-hidden="true"></i>
         </a>
 
-        <a ng-if="$ctrl.data.voted" href="#" ng-click="$ctrl.remove($ctrl.data,null, 'down')"
+        <a ng-if="$ctrl.data.voted && $ctrl.data.state != 'RUNNING'" href="#"
+           ng-click="$ctrl.remove($ctrl.data,null, 'down') "
            class="btn-sm btn-primary align-middle pull-right"> <i class="fa  fa-thumbs-down" aria-hidden="true"></i>
         </a>
 
-        <a href="#" ng-if="$ctrl.data.watchers.length>0" ng-click="$ctrl.release($ctrl.data.name)"
+        <a href="#" ng-if="$ctrl.data.watchers.length>0 && $ctrl.data.state != 'RUNNING'"
+           ng-click="$ctrl.release($ctrl.data.name)"
            class="btn-sm btn-primary align-middle pull-right marg"> <i class="fa  fa-plane" aria-hidden="true"></i>
         </a>
     </div>
