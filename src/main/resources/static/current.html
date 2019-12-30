@@ -1,6 +1,6 @@
 <table class="table table-hover">
     <tbody>
-    <tr ng-repeat="el in current">
+    <tr ng-repeat="el in $ctrl.versions | filter:{state:'RUNNING'}">
         <td class="text-primary font-weight-bold"><i class="fa fa-spinner fa-spin "
                                                      aria-hidden="true"></i> {{el.name}}
         </td>

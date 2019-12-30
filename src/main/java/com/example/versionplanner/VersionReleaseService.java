@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -23,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
 public class VersionReleaseService {
 
+	private static final int TIMEOUT = 60 * 1000 * 60 * 5;
+
 	static Logger logger = LoggerFactory.getLogger(VersionReleaseService.class);
 	@Autowired
 	VoteRepo voteRepo;
@@ -32,48 +35,60 @@ public class VersionReleaseService {
 	TxService txService;
 
 	public void releaseVersion(final String name) throws Exception {
+		Version version = versionRepo.findByName(name);
+		if (version.getState() == VersionState.RUNNING) {
+			return;
+		}
 		txService.run(() -> {
-			Version version = versionRepo.findByName(name);
 			version.setState(VersionState.RUNNING);
 			version.setStart(LocalDateTime.now());
 			versionRepo.save(version);
 		});
 
-		ProcessBuilder builder = new ProcessBuilder("mvn.bat", "compile");
+		new Thread(() -> {
+			try {
+				executeCommand(name, Arrays.asList("date"));
+				executeCommand(name, Arrays.asList("whoami"));
+				int waitFor = executeCommand(name, Arrays.asList("./nedsy.sh", "-v", name));
+				txService.run(() -> {
+					Version findByName1 = versionRepo.findByName(name);
+					if (waitFor == 0) {
+						voteRepo.deleteAll(voteRepo.findAll(Example.of(new Vote(name))));
+						findByName1.setState(VersionState.SUCCESS);
+					} else {
+						findByName1.setState(VersionState.ERROR);
+					}
+					versionRepo.save(findByName1);
+				});
+			} catch (Exception e) {
+				e.printStackTrace();
+				txService.run(() -> {
+					Version findByName2 = versionRepo.findByName(name);
+					findByName2.setState(VersionState.ERROR);
+					versionRepo.save(findByName2);
+				});
+			}
+		}).start();;
+	}
+
+	public static int executeCommand(final String name, final List<String> commands) throws Exception {
+		ProcessBuilder builder = new ProcessBuilder(commands);
 		// builder.inheritIO();
 
-		// builder.directory(new File("/home/neds/VERTO/"));
-		builder.directory(new File("F:\\Verto2017\\workspace\\abc\\"));
-		builder.environment().put("PATH", "F:\\Verto2017\\apache-maven-3.0.4\\bin\\");
-		try {
+		builder.directory(new File("/home/neds/VERTO/"));
+		// builder.directory(new File("F:\\Verto2017\\workspace\\server-verto-product"));
+		builder.environment().put("PATH", System.getenv("PATH") + ";" + "/opt/maven/bin;/usr/bin;");
 
-			Process exec = builder.start();
+		Process exec = builder.start();
 
-			log(name, exec.getErrorStream());
-			log(name, exec.getInputStream());
-			int waitFor = exec.waitFor();
-			txService.run(() -> {
-				Version findByName = versionRepo.findByName(name);
-				if (waitFor == 0) {
-					voteRepo.deleteAll(voteRepo.findAll(Example.of(new Vote(name))));
-					findByName.setState(VersionState.SUCCESS);
-				} else {
-					findByName.setState(VersionState.ERROR);
-				}
-				versionRepo.save(findByName);
-			});
-		} catch (Exception e) {
-			txService.run(() -> {
-				Version findByName = versionRepo.findByName(name);
-				findByName.setState(VersionState.ERROR);
-				versionRepo.save(findByName);
-			});
-		}
-
+		log(name, exec.getErrorStream());
+		log(name, exec.getInputStream());
+		timeout(exec);
+		return exec.waitFor();
 	}
 
 	public void releaseAll() throws Exception {
-		versionRepo.deleteUnused();
+		// versionRepo.deleteUnused();
 		List<String> collect = voteRepo.findAll().stream().map(Vote::getVersion).distinct().collect(toList());
 		for (String name : collect) {
 			releaseVersion(name);
@@ -95,6 +110,26 @@ public class VersionReleaseService {
 					reader.close();
 				} catch (final Exception e) {
 					e.printStackTrace();
+				}
+			}
+		};
+		ioThread.start();
+	}
+
+	public static void timeout(final Process exec) {
+		long currentTimeMillis = System.currentTimeMillis();
+		final Thread ioThread = new Thread() {
+
+			@Override
+			public void run() {
+				while (exec.isAlive()) {
+					try {
+						Thread.sleep(60000);
+					} catch (InterruptedException e) {
+					}
+					if (System.currentTimeMillis() > currentTimeMillis + TIMEOUT) {
+						exec.destroyForcibly();
+					}
 				}
 			}
 		};

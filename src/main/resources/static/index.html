@@ -16,16 +16,50 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="app.css">
+    <base href="/vp">
 </head>
 
 <body>
+<!--
+<div class="fixed-top">
+  <nav class="navbar navbar-expand-lg navbar-dark mx-background-top-linear">
+    <div class="container">
+      <a class="navbar-brand" href="index.html" style="text-transform: italic;"> Verto Version Releaser</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+
+        <ul class="navbar-nav ml-auto">
+
+          <li class="nav-item active">
+            <a class="nav-link" href="#">JIRA
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="#">Versions</a>
+          </li>
+
+         <li class="nav-item">
+            <a class="nav-link" href="#">Savem</a>
+          </li>
+
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>
+ -->
 <div id="app" ng-controller="versionManager as $ctrl">
-    <a href="#" onclick="editUserName()">
+    <a href="#" onclick="$event.preventDefault();editUserName()">
         <div class="pull-right">{{user.name}} <i class="fa fa-pencil" aria-hidden="true"></i></div>
     </a>
     <h3 class="text-muted font-italic font-weight-bold ">
         <span id="grad1"> Verto Version Releaser</span>
-        <a ng-if="$ctrl.planned.length > 0" href="#" ng-click="$ctrl.releaseAll()"
+        <a ng-if="$ctrl.planned.length > 0" href="#" ng-click="$event.preventDefault();$ctrl.releaseAll()"
            class="btn-sm btn-success align-middle"> <i class="fa  fa-plane" aria-hidden="true"> Release all now</i>
         </a>
     </h3>
@@ -81,7 +115,7 @@
                         W trakcie
                     </li>
                 </ol>
-                <current/>
+                <current versions="$ctrl.versions"/>
             </nav>
             <br>
             <nav aria-label="breadcrumb">
@@ -107,9 +141,9 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
       integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<!--
-Your HTML content here
--->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.css"/>
+s
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"
         integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/pl.js"
@@ -131,7 +165,7 @@ Your HTML content here
       type='text/css' media='all'/>
 <script type='text/javascript'
         src='//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.js'></script>
-<script src="app.js"></script>
+<script src="vp/app.js"></script>
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">

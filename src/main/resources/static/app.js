@@ -42,49 +42,82 @@ app.factory('apiService', function ($http) {
     };
     var getVersions = function () {
         return new Promise(function (res, rej) {
-            $http.get('http://localhost:8080/vp/version/list').then(function successCallback(response) {
+            $http.get('vp/version/list').then(function successCallback(response) {
                 res(response.data);
             });
         });
     };
     var addVersion = function (name) {
         return new Promise(function (res, rej) {
-            $http.post('http://localhost:8080/vp/version', {name: name}).then(res);
+            $http.post('/vp/version', {name: name}).then(res);
         });
     };
     var getVotes = function () {
         return new Promise(function (res, rej) {
-            $http.get('http://localhost:8080/vp/vote/list').then(function successCallback(response) {
+            $http.get('vp/vote/list').then(function successCallback(response) {
                 res(response.data);
             });
         });
     };
     var releaseVersion = function (version) {
         return new Promise(function (res, rej) {
-            $http.post('http://localhost:8080/vp/version/releaseVersion', {version: version}).then(res);
+            $http.post('vp/version/releaseVersion', {version: version}).then(res);
         });
     };
     var releaseAll = function () {
         return new Promise(function (res, rej) {
-            $http.post('http://localhost:8080/vp/version/releaseAll').then(res);
+            $http.post('vp/version/releaseAll').then(res);
         });
     };
     var addVote = function (version, login) {
         return new Promise(function (res, rej) {
-            $http.post('http://localhost:8080/vp/vote', {version: version, login: login}).then(res);
+            $http.post('vp/vote', {version: version, login: login}).then(res);
         });
     };
     var deleteVote = function (version, login) {
         return new Promise(function (res, rej) {
-            $http.post('http://localhost:8080/vp/vote/delete', {version: version, login: login}).then(res);
+            $http.post('vp/vote/delete', {version: version, login: login}).then(res);
         });
     };
-    return {getLastVersions, getVotes, getVersions, releaseVersion, releaseAll, addVote, deleteVote, addVersion};
+    var error = function (version) {
+        return new Promise(function (res, rej) {
+            $http({
+                method: 'Get',
+                url: 'vp/version/error?version=' + version,
+                transformResponse: function (data) {
+                    return data;
+                }
+            }).then(res)
+        });
+    };
+    return {
+        getLastVersions,
+        getVotes,
+        getVersions,
+        releaseVersion,
+        releaseAll,
+        addVote,
+        deleteVote,
+        addVersion,
+        error
+    };
 });
 
 app.component('version', {
-    templateUrl: '/version.html',
-    controller: function VersionController($scope) {
+    templateUrl: 'vp/version.html',
+    controller: function VersionController($scope, apiService) {
+        this.showError = function (data) {
+            apiService.error(data.name).then(function (res) {
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Log',
+                    text: res.data,
+                    customClass: 'swal-wide',
+                    html: '<pre style=" text-align: left;">' + res.data + '</pre>'
+                })
+            })
+        }
     }, bindings: {
         role: '@',
         data: '=',
@@ -102,24 +135,30 @@ app.filter('humanTime', function () {
 });
 
 app.component('history', {
-    templateUrl: '/history.html',
+    templateUrl: 'vp/history.html',
     controller: function HistoryController($http, $scope, apiService) {
+        var self = this;
+        setInterval(function () {
+            $scope.$apply(function () {
+                self.$onInit();
+            });
+        }, 100000);
+
         this.$onInit = function () {
             apiService.getLastVersions().then(function (res) {
                 $scope.history = res;
             });
         };
     }
+
 });
 app.component('current', {
-    templateUrl: '/current.html',
+    templateUrl: 'vp/current.html',
     controller: function CurrentController($http, $scope, apiService) {
-        this.$onInit = function () {
-            apiService.getVersions().then(function (res) {
-                $scope.current = res.filter((e) => e.state === 'RUNNING');
-            });
-        };
+    }, bindings: {
+        versions: '='
     }
+
 });
 app.controller('versionManager', function ($http, $scope, $timeout, apiService) {
     var self = this;
@@ -131,6 +170,11 @@ app.controller('versionManager', function ($http, $scope, $timeout, apiService) 
             }
         }
     });
+    setInterval(function () {
+        $scope.$apply(function () {
+            self.reloadVotes();
+        });
+    }, 100000);
     this.$onInit = function () {
         $scope.user = {"name": localStorage.getItem('user')};
         this.reloadVotes();
@@ -139,6 +183,7 @@ app.controller('versionManager', function ($http, $scope, $timeout, apiService) 
         self.planned = [];
         self.avaliable = [];
         apiService.getVersions().then(function (data) {
+            self.versions = data;
             self.avaliable = data.map(el => {
                 el.watchers = [];
                 return el;
@@ -161,7 +206,8 @@ app.controller('versionManager', function ($http, $scope, $timeout, apiService) 
     this.releaseVersion = function (version) {
         confirm().then(function () {
             apiService.releaseVersion(version).then(self.reloadVotes);
-        })
+        });
+        return false;
     };
     this.releaseAll = function () {
         confirm().then(function () {
@@ -221,10 +267,10 @@ app.controller('versionManager', function ($http, $scope, $timeout, apiService) 
 
 
 app.directive('avaliable', function () {
-    return {restrict: 'E', templateUrl: '/avaliable.html', replace: true};
+    return {restrict: 'E', templateUrl: 'vp/avaliable.html', replace: true};
 });
 app.directive('planned', function () {
-    return {restrict: 'E', templateUrl: '/planned.html', replace: true};
+    return {restrict: 'E', templateUrl: 'vp/planned.html', replace: true};
 });
 
 function confirm() {

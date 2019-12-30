@@ -30,16 +30,13 @@
 		</discriminator>
 		<sift>
 			<appender name="FILE-${version}"
-				class="ch.qos.logback.core.rolling.RollingFileAppender">
-				<append>true</append>
+				class="ch.qos.logback.core.FileAppender">
+				<immediateFlush>true</immediateFlush>
+				<append>false</append>
 				<encoder>
-					<pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+					<pattern>%msg%n</pattern>
 				</encoder>
-				<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-					<fileNamePattern>logs/vvp-${version}-%d{yyyy-MM-dd}.log
-					</fileNamePattern>
-					<maxHistory>7</maxHistory>
-				</rollingPolicy>
+					<file>logs/vvp-${version}.log</file>
 			</appender>
 		</sift>
 		</appender>

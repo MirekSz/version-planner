@@ -10,18 +10,23 @@
                 <span ng-if="$ctrl.data.watchers.length">  ({{$ctrl.data.watchers.length}})</span>
             </h5>
         </div>
+        <a ng-if="$ctrl.data.state == 'ERROR'" href="#"
+           ng-click="$event.preventDefault();$ctrl.showError($ctrl.data)"
+           class="btn-sm btn-danger align-middle pull-right marg"> <i class="fa  fa-bug" aria-hidden="true"></i>
+        </a>
         <a ng-if="!$ctrl.data.voted && $ctrl.data.state != 'RUNNING'" href="#"
-           ng-click="$ctrl.add($ctrl.data,null, 'up')"
-           class="btn-sm btn-primary align-middle pull-right"> <i class="fa  fa-thumbs-up" aria-hidden="true"></i>
+           ng-click="$event.preventDefault();$ctrl.add($ctrl.data,null, 'up')"
+           class="btn-sm btn-primary align-middle pull-right marg"> <i class="fa  fa-thumbs-up" aria-hidden="true"></i>
         </a>
 
         <a ng-if="$ctrl.data.voted && $ctrl.data.state != 'RUNNING'" href="#"
-           ng-click="$ctrl.remove($ctrl.data,null, 'down') "
-           class="btn-sm btn-primary align-middle pull-right"> <i class="fa  fa-thumbs-down" aria-hidden="true"></i>
+           ng-click="$event.preventDefault();$ctrl.remove($ctrl.data,null, 'down') "
+           class="btn-sm btn-primary align-middle pull-right marg"> <i class="fa  fa-thumbs-down"
+                                                                       aria-hidden="true"></i>
         </a>
 
         <a href="#" ng-if="$ctrl.data.watchers.length>0 && $ctrl.data.state != 'RUNNING'"
-           ng-click="$ctrl.release($ctrl.data.name)"
+           ng-click="$event.preventDefault();$ctrl.release($ctrl.data.name)"
            class="btn-sm btn-primary align-middle pull-right marg"> <i class="fa  fa-plane" aria-hidden="true"></i>
         </a>
     </div>

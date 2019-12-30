@@ -11,7 +11,7 @@ public class VersionReleaserTimer {
 	@Autowired
 	VersionReleaseService service;
 
-	@Scheduled(cron = "0 0 23 * * MON-FRI")
+	@Scheduled(cron = "0 0 23 * * *")
 	public void run() throws Exception {
 		service.releaseAll();
 	}
