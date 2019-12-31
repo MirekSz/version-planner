@@ -54,16 +54,21 @@
 </div>
  -->
 <div id="app" ng-controller="versionManager as $ctrl">
-    <a href="#" onclick="$event.preventDefault();editUserName()">
-        <div class="pull-right">{{user.name}} <i class="fa fa-pencil" aria-hidden="true"></i></div>
+<div id="header" >
+  <h5 class="float-vertical-align">
+    <a href="#" onclick="event.preventDefault();editUserName()" id="user">
+        <div ><i class="fa fa-user" aria-hidden="true"></i> {{user.name}} </div>
     </a>
+    </h5>
     <h3 class="text-muted font-italic font-weight-bold ">
+    <i class="fa fa-truck text-success" aria-hidden="true"></i>
         <span id="grad1"> Verto Version Releaser</span>
-        <a ng-if="$ctrl.planned.length > 0" href="#" ng-click="$event.preventDefault();$ctrl.releaseAll()"
-           class="btn-sm btn-success align-middle"> <i class="fa  fa-plane" aria-hidden="true"> Release all now</i>
+         <a ng-if="$ctrl.planned.length > 0" href="#" ng-click="$event.preventDefault();$ctrl.releaseAll()"
+           class="align-middle release-all"> <i class="fa  fa-plane" aria-hidden="true"> Release all </i>
         </a>
     </h3>
 
+</div>
     <hr>
     <div class="row">
         <div class="col-sm-12 col-md-9 animate-repeat">
@@ -74,6 +79,8 @@
                         Zaplanowane
                     </li>
                 </ol>
+                  </ol>
+
             </nav>
             <div class="row">
                 <planned class="example-animate-container" user={{user}}/>
@@ -87,7 +94,6 @@
                                                                               aria-hidden="true"></i>
                         Dostępne
                     </li>
-                </ol>
             </nav>
             <br>
             <div class="row">
