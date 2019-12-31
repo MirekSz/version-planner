@@ -16,7 +16,13 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="app.css">
-    <base href="/vp">
+    <base href="/vvp">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.css"/>
+<link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.css'
+      type='text/css' media='all'/>
 </head>
 
 <body>
@@ -76,7 +82,7 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item active " aria-current="page"><i class="fa fa-paper-plane"
                                                                                aria-hidden="true"></i>
-                        Zaplanowane
+                        Planned
                     </li>
                 </ol>
                   </ol>
@@ -92,7 +98,7 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item active" aria-current="page"><i class="fa fa-database"
                                                                               aria-hidden="true"></i>
-                        Dostępne
+                        Available
                     </li>
             </nav>
             <br>
@@ -103,7 +109,7 @@
                             <div>
                                 <button ng-click="$ctrl.addVersion()" class="btn-sm btn-success" style="width: 100%"><i
                                         class="fa fa-plus"
-                                        aria-hidden="true"></i> Dodaj
+                                        aria-hidden="true"></i> Add
                                 </button>
                             </div>
                         </div>
@@ -118,7 +124,7 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item active" aria-current="page"><i class="fa fa-clock-o"
                                                                               aria-hidden="true"></i>
-                        W trakcie
+                       In progress
                     </li>
                 </ol>
                 <current versions="$ctrl.versions"/>
@@ -128,7 +134,7 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item active" aria-current="page"><i class="fa fa-history"
                                                                               aria-hidden="true"></i>
-                        Ostatnio wydane
+                        Last versions
                     </li>
                 </ol>
                 <history/>
@@ -141,14 +147,6 @@
     your browser</a> to improve your experience.</p>
 <![endif]-->
 
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- Angular Material style sheet -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.css"/>
-s
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"
         integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
@@ -159,7 +157,6 @@ s
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-animate.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-aria.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-messages.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-i18n/1.7.9/angular-locale_pl-pl.js"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.min.js"></script>
@@ -167,11 +164,9 @@ s
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
-<link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.css'
-      type='text/css' media='all'/>
 <script type='text/javascript'
         src='//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.js'></script>
-<script src="vp/app.js"></script>
+<script src="vvp/app.js"></script>
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">

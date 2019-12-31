@@ -42,48 +42,48 @@ app.factory('apiService', function ($http) {
     };
     var getVersions = function () {
         return new Promise(function (res, rej) {
-            $http.get('vp/version/list').then(function successCallback(response) {
+            $http.get('vvp/version/list').then(function successCallback(response) {
                 res(response.data);
             });
         });
     };
     var addVersion = function (name) {
         return new Promise(function (res, rej) {
-            $http.post('/vp/version', {name: name}).then(res);
+            $http.post('/vvp/version', {name: name}).then(res);
         });
     };
     var getVotes = function () {
         return new Promise(function (res, rej) {
-            $http.get('vp/vote/list').then(function successCallback(response) {
+            $http.get('vvp/vote/list').then(function successCallback(response) {
                 res(response.data);
             });
         });
     };
     var releaseVersion = function (version) {
         return new Promise(function (res, rej) {
-            $http.post('vp/version/releaseVersion', {version: version}).then(res);
+            $http.post('vvp/version/releaseVersion', {version: version}).then(res);
         });
     };
     var releaseAll = function () {
         return new Promise(function (res, rej) {
-            $http.post('vp/version/releaseAll').then(res);
+            $http.post('vvp/version/releaseAll').then(res);
         });
     };
     var addVote = function (version, login) {
         return new Promise(function (res, rej) {
-            $http.post('vp/vote', {version: version, login: login}).then(res);
+            $http.post('vvp/vote', {version: version, login: login}).then(res);
         });
     };
     var deleteVote = function (version, login) {
         return new Promise(function (res, rej) {
-            $http.post('vp/vote/delete', {version: version, login: login}).then(res);
+            $http.post('vvp/vote/delete', {version: version, login: login}).then(res);
         });
     };
     var error = function (version) {
         return new Promise(function (res, rej) {
             $http({
                 method: 'Get',
-                url: 'vp/version/error?version=' + version,
+                url: 'vvp/version/error?version=' + version,
                 transformResponse: function (data) {
                     return data;
                 }
@@ -104,7 +104,7 @@ app.factory('apiService', function ($http) {
 });
 
 app.component('version', {
-    templateUrl: 'vp/version.html',
+    templateUrl: 'vvp/version.html',
     controller: function VersionController($scope, apiService) {
         this.showError = function (data) {
             apiService.error(data.name).then(function (res) {
@@ -135,7 +135,7 @@ app.filter('humanTime', function () {
 });
 
 app.component('history', {
-    templateUrl: 'vp/history.html',
+    templateUrl: 'vvp/history.html',
     controller: function HistoryController($http, $scope, apiService) {
         var self = this;
         setInterval(function () {
@@ -153,7 +153,7 @@ app.component('history', {
 
 });
 app.component('current', {
-    templateUrl: 'vp/current.html',
+    templateUrl: 'vvp/current.html',
     controller: function CurrentController($http, $scope, apiService) {
     }, bindings: {
         versions: '='
@@ -267,10 +267,10 @@ app.controller('versionManager', function ($http, $scope, $timeout, apiService) 
 
 
 app.directive('avaliable', function () {
-    return {restrict: 'E', templateUrl: 'vp/avaliable.html', replace: true};
+    return {restrict: 'E', templateUrl: 'vvp/avaliable.html', replace: true};
 });
 app.directive('planned', function () {
-    return {restrict: 'E', templateUrl: 'vp/planned.html', replace: true};
+    return {restrict: 'E', templateUrl: 'vvp/planned.html', replace: true};
 });
 
 function confirm() {
