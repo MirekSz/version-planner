@@ -193,7 +193,7 @@ app.controller('versionManager', function ($http, $scope, $timeout, apiService) 
                 for (let d of response) {
                     let find = _.find([].concat(self.avaliable).concat(self.planned), (o) => o.name == d.version);
                     if (find) {
-                        self.addWatcher(find, d.login)
+                        self.addWatcher(find, d.login,undefined, d.date)
                     }
                 }
             }, function errorCallback(response) {
@@ -214,11 +214,11 @@ app.controller('versionManager', function ($http, $scope, $timeout, apiService) 
             apiService.releaseAll().then(self.reloadVotes);
         })
     };
-    this.addWatcher = function (version, userName, voteType) {
+    this.addWatcher = function (version, userName, voteType,date) {
         let user = userName != null ? userName : $scope.user.name;
         if (_.findIndex(version.watchers, (o) => o.user.name == user) == -1) {
 
-            version.watchers.push({user: {name: user}, date: new Date()});
+            version.watchers.push({user: {name: user}, date: (date!=null?date:new Date())});
             if (version.watchers.length == 1) {
                 _.remove(self.avaliable, {
                     name: version.name
