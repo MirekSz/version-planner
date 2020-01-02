@@ -52,6 +52,11 @@ app.factory('apiService', function ($http) {
             $http.post('/vvp/version', {name: name}).then(res);
         });
     };
+    var deleteVersion = function (name) {
+    	return new Promise(function (res, rej) {
+    		$http.post('/vvp/version/delete', {name: name}).then(res);
+    	});
+    };
     var getVotes = function () {
         return new Promise(function (res, rej) {
             $http.get('vvp/vote/list').then(function successCallback(response) {
@@ -99,6 +104,7 @@ app.factory('apiService', function ($http) {
         addVote,
         deleteVote,
         addVersion,
+        deleteVersion,
         error
     };
 });
@@ -117,6 +123,9 @@ app.component('version', {
                     html: '<pre style=" text-align: left;">' + res.data + '</pre>'
                 })
             })
+        },
+        this.deleteVersion = function (name) {
+        	this.del.deleteVersion(name)
         }
     }, bindings: {
         role: '@',
@@ -124,7 +133,8 @@ app.component('version', {
         user: '=',
         add: '<',
         remove: '<',
-        release: '<'
+        release: '<',
+        del: '='
     }
 });
 
@@ -263,6 +273,13 @@ app.controller('versionManager', function ($http, $scope, $timeout, apiService) 
             }
         })
     }
+    this.deleteVersion = function (name) {
+    	debugger
+    	var self = this;
+    	confirm().then(function (data) {
+    			apiService.deleteVersion(name).then(self.reloadVotes)
+    	});
+    }
 });
 
 
@@ -281,7 +298,7 @@ function confirm() {
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, release it!'
+            confirmButtonText: 'Yes, do it!'
         }).then((result) => {
             if (result.value) {
                 res();

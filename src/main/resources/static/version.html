@@ -29,6 +29,12 @@
            ng-click="$event.preventDefault();$ctrl.release($ctrl.data.name)"
            class="btn-sm btn-primary align-middle pull-right marg"> <i class="fa  fa-plane" aria-hidden="true"></i>
         </a>
+
+		 <a href="#" ng-if="$ctrl.data.watchers.length==0 && $ctrl.data.role != 'release'"
+           ng-click="$event.preventDefault();$ctrl.deleteVersion($ctrl.data.name)"
+           class="btn-sm btn-primary align-middle pull-right marg"> <i class="fa  fa-trash" aria-hidden="true"></i>
+        </a>
+
     </div>
     <div class="card-body" ng-if="$ctrl.data.watchers.length > 0">
         <ul class="list-group example-animate-container">

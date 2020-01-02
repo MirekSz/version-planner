@@ -51,6 +51,14 @@ public class VersionRestController {
 		}
 	}
 
+	@PostMapping("/delete")
+	public void delete(final @RequestBody @Valid Version version) {
+		Version findByLoginAndVersion = repo.findByName(version.getName());
+		if (findByLoginAndVersion != null) {
+			repo.delete(findByLoginAndVersion);
+		}
+	}
+
 	@GetMapping("/list")
 	public List<Version> list() {
 		return repo.findAll();
