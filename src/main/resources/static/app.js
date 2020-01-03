@@ -34,6 +34,7 @@ app.factory('apiService', function ($http) {
         return new Promise(function (res, rej) {
             $http.get('http://strumyk-next-build:3030/jira-versions/versions').then(function (data) {
                 res(data.data.filter(word => word.projectId == 10000 && word.released).map(e => {
+                	e.ver = e.name;
                     e.name = e.name.replace('1.0.', '');
                     return e;
                 }).slice(0, 10));
