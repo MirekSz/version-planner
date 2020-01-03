@@ -27,24 +27,23 @@
 
 <body>
 <div id="app" ng-controller="versionManager as $ctrl">
-    <div id="header">
-        <h5 class="float-vertical-align">
-            <a href="#" onclick="event.preventDefault();editUserName()" id="user">
-                <div><i class="fa fa-user" aria-hidden="true"></i> {{user.name}}</div>
-            </a>
-        </h5>
-        <h5 class="float-vertical-align">
-            <a href="#" data-toggle="modal" data-target="#infoModal" id="user" >
-              <i class="fa fa-question-circle" aria-hidden="true"></i>
-            </a>
-        </h5>
-        <h3 class="text-muted font-italic font-weight-bold ">
+    <div id="header" class="row">
+        <h3 class="col-sm-12 col-md-10 text-muted font-italic font-weight-bold ">
             <i class="fa fa-truck text-success" aria-hidden="true"></i>
             <span id="grad1"> Verto Version Releaser</span>
             <a ng-if="$ctrl.planned.length > 0" href="#" ng-click="$event.preventDefault();$ctrl.releaseAll()"
-               class="align-middle release-all"> <i class="fa  fa-plane" aria-hidden="true"> Release all </i>
+               class="align-middle release-all"> <i class="fa  fa-plane" aria-hidden="true"> Release all now</i>
             </a>
+           </span>
         </h3>
+        <h5 class="col-sm-12 col-md-2 text-right float-vertical-align">
+            <a href="#" data-toggle="modal" data-target="#infoModal" >
+              <i class="fa fa-question-circle" aria-hidden="true"></i>
+            </a>
+               <a href="#" onclick="event.preventDefault();editUserName()" >
+               <i class="fa fa-user" aria-hidden="true"></i> {{user.name}}
+            </a>
+        </h5>
 
     </div>
     <hr>
@@ -54,7 +53,7 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item active " aria-current="page"><i class="fa fa-paper-plane"
                                                                                aria-hidden="true"></i>
-                        Planned
+                        Planned for today 23h
                     </li>
                 </ol>
                 </ol>
@@ -197,6 +196,12 @@
     <label for="staticEmail" class="col-sm-3 col-form-label">Start/Stop</label>
     <div class="col-sm-9">
       <input type="text" readonly class="form-control-plaintext"  value="service vvp start/stop">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="staticEmail" class="col-sm-3 col-form-label">Script</label>
+    <div class="col-sm-9">
+      <input type="text" readonly class="form-control-plaintext"  value="/home/neds/VERTO/nedsy.sh">
     </div>
   </div>
   </form>
