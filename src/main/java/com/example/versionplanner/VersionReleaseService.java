@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +48,7 @@ public class VersionReleaseService {
 
 		new Thread(() -> {
 			try {
+				Thread.sleep(new Random().nextInt(100000));
 				executeCommand(name, Arrays.asList("date"));
 				executeCommand(name, Arrays.asList("whoami"));
 				int waitFor = executeCommand(name, Arrays.asList("./nedsy.sh", "-v", name));
@@ -134,5 +136,8 @@ public class VersionReleaseService {
 			}
 		};
 		ioThread.start();
+	}
+
+	public static void main(final String[] args) {
 	}
 }

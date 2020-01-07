@@ -67,7 +67,7 @@ public class VersionRestController {
 	@GetMapping("/error")
 	public String log(@RequestParam("version") final String version) throws Exception {
 		String path = new File("").getAbsolutePath() + File.separator + "logs" + File.separator + "vvp-" + version + ".log";
-		return Tail.tailFile(new File(path).toPath(), 1000).stream().reduce("", String::concat);
+		return Tail.tailFile(new File(path).toPath(), 400).stream().reduce("", String::concat);
 	}
 
 	@PostMapping("/releaseVersion")
