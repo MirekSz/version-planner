@@ -48,7 +48,7 @@ public class VersionReleaseService {
 
 		new Thread(() -> {
 			try {
-				Thread.sleep(new Random().nextInt(100000));
+				Thread.sleep(new Random().nextInt(600000));
 				executeCommand(name, Arrays.asList("date"));
 				executeCommand(name, Arrays.asList("whoami"));
 				int waitFor = executeCommand(name, Arrays.asList("./nedsy.sh", "-v", name));
