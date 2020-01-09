@@ -90,7 +90,6 @@ public class VersionReleaseService {
 	}
 
 	public void releaseAll() throws Exception {
-		// versionRepo.deleteUnused();
 		List<String> collect = voteRepo.findAll().stream().map(Vote::getVersion).distinct().collect(toList());
 		for (String name : collect) {
 			releaseVersion(name);

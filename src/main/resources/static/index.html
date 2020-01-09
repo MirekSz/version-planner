@@ -37,7 +37,7 @@
            </span>
            <div style="
     font-size: 12px;
-            ">Releaser: <a ng-click="$event.preventDefault();" href="#">Marcel Matuszak <i class="fa fa-edit" aria-hidden="true"></i></a></div>
+            ">Releaser: <a ng-click="$event.preventDefault();$ctrl.updateReleaser()" href="#">{{$ctrl.releaser}} <i class="fa fa-edit" aria-hidden="true"></i></a></div>
              <div style="
     font-size: 10px;
             ">N:\verto\wypuszczanie wersji</div>
@@ -59,7 +59,7 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item active " aria-current="page"><i class="fa fa-paper-plane"
                                                                                aria-hidden="true"></i>
-                        Planned for today 23h
+                        Planned for today 18h
                     </li>
                 </ol>
                 </ol>
@@ -144,7 +144,7 @@
 <script type='text/javascript'
         src='//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.js'></script>
 <script src="vvp/app.js"></script>
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -155,15 +155,39 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form onsubmit="closeModal()">
+                <form onsubmit="closeUserModal()">
                     <div class="form-group">
-                        <label for="recipient-name" class="col-form-label">Name:</label>
+                        <label for="user-name" class="col-form-label">Name:</label>
                         <input placeholder="np. MirekSz" type="text" class="form-control" id="user-name">
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" onclick="closeModal()" class="btn btn-primary">Save</button>
+                <button type="button" onclick="closeUserModal()" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="releaserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Enter user name</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="closeReleaserModal()">
+                    <div class="form-group">
+                        <label for="releaser" class="col-form-label">Name:</label>
+                        <input type="text" class="form-control" id="releaser">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="closeReleaserModal()" class="btn btn-primary">Save</button>
             </div>
         </div>
     </div>

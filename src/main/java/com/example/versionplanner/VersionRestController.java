@@ -10,12 +10,10 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,16 +30,9 @@ public class VersionRestController {
 	@Autowired
 	VersionRepo repo;
 	@Autowired
+	PropRepo propRepo;
+	@Autowired
 	VersionReleaseService service;
-
-	@PostConstruct
-	@Scheduled(fixedDelay = 60000)
-	public void init() {
-		add(new Version("175"));
-		add(new Version("177"));
-		add(new Version("178"));
-		add(new Version("179"));
-	}
 
 	@PostMapping
 	public void add(final @RequestBody @Valid Version version) {
@@ -57,6 +48,23 @@ public class VersionRestController {
 		if (findByLoginAndVersion != null) {
 			repo.delete(findByLoginAndVersion);
 		}
+	}
+
+	@PostMapping("/updateReleaser")
+	public void updateReleaser(final @RequestBody @Valid Prop prop) {
+		Prop findByName = propRepo.findByName(PropRepo.RELEASER);
+		if (findByName == null) {
+			findByName = new Prop();
+			findByName.setName(PropRepo.RELEASER);
+		}
+		findByName.setValue(prop.getValue());
+		propRepo.save(findByName);
+	}
+
+	@GetMapping("/getReleaser")
+	public Prop getReleaser() {
+		Prop findByName = propRepo.findByName(PropRepo.RELEASER);
+		return findByName;
 	}
 
 	@GetMapping("/list")

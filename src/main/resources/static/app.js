@@ -10,7 +10,7 @@ function refreshUserName() {
 
 function editUserName() {
     $("#user-name").val(localStorage.getItem('user'));
-    $('#exampleModal').modal('toggle');
+    $('#userModal').modal('toggle');
 }
 
 var app = angular.module('myApp', ['angular-loading-bar', 'ngAnimate']);
@@ -22,11 +22,18 @@ setTimeout(function () {
     }
 }, 500);
 
-function closeModal() {
+function closeUserModal() {
     localStorage.setItem('user', $("#user-name").val());
     refreshUserName();
 
-    $('#exampleModal').modal('hide');
+    $('#userModal').modal('hide');
+}
+function closeReleaserModal() {
+	  var appElement = document.querySelector('[id=app]');
+	    var $scope = angular.element(appElement).scope();
+	    $scope.$ctrl.updateReleaser($("#releaser").val());
+
+	$('#releaserModal').modal('hide');
 }
 
 app.factory('apiService', function ($http) {
@@ -85,6 +92,16 @@ app.factory('apiService', function ($http) {
             $http.post('vvp/vote/delete', {version: version, login: login}).then(res);
         });
     };
+    var updateReleaser = function (name) {
+    	return new Promise(function (res, rej) {
+    		$http.post('vvp/version/updateReleaser', {value: name}).then(res);
+    	});
+    };
+    var getReleaser = function () {
+    	return new Promise(function (res, rej) {
+    		$http.get('vvp/version/getReleaser').then(res);
+    	});
+    };
     var error = function (version) {
         return new Promise(function (res, rej) {
             $http({
@@ -98,6 +115,8 @@ app.factory('apiService', function ($http) {
     };
     return {
         getLastVersions,
+        updateReleaser,
+        getReleaser,
         getVotes,
         getVersions,
         releaseVersion,
@@ -188,8 +207,19 @@ app.controller('versionManager', function ($http, $scope, $timeout, apiService) 
     }, 100000);
     this.$onInit = function () {
         $scope.user = {"name": localStorage.getItem('user')};
+        apiService.getReleaser().then(function(data){
+        	self.releaser = data.data.value;
+        })
         this.reloadVotes();
     };
+    this.updateReleaser = function (name) {
+    	if(!name){
+    		$('#releaserModal').modal('toggle');
+    	}else{
+    		apiService.updateReleaser(name);
+    		this.releaser = name;
+    	}
+    }
     this.reloadVotes = function () {
         self.planned = [];
         self.avaliable = [];
