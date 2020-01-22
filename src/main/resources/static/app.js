@@ -136,7 +136,7 @@ app.component('version', {
             apiService.error(data.name).then(function (res) {
 
                 Swal.fire({
-                    icon: 'error',
+                    icon: 'info',
                     title: 'Log',
                     text: res.data,
                     customClass: 'swal-wide',
@@ -305,7 +305,6 @@ app.controller('versionManager', function ($http, $scope, $timeout, apiService) 
         })
     }
     this.deleteVersion = function (name) {
-    	debugger
     	var self = this;
     	confirm().then(function (data) {
     			apiService.deleteVersion(name).then(self.reloadVotes)

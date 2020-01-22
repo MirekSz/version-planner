@@ -14,6 +14,10 @@
            ng-click="$event.preventDefault();$ctrl.showError($ctrl.data)"
            class="btn-sm btn-danger align-middle pull-right marg"> <i class="fa  fa-bug" aria-hidden="true"></i>
         </a>
+        <a ng-if="$ctrl.data.state == 'RUNNING'" href="#" title="Show log"
+           ng-click="$event.preventDefault();$ctrl.showError($ctrl.data)"
+           class="btn-sm btn-primary align-middle pull-right marg"> <i class="fa  fa-file-text-o" aria-hidden="true"></i>
+        </a>
         <a ng-if="!$ctrl.data.voted && $ctrl.data.state != 'RUNNING'" href="#" title="Add vote"
            ng-click="$event.preventDefault();$ctrl.add($ctrl.data,null, 'up')"
            class="btn-sm btn-primary align-middle pull-right marg"> <i class="fa  fa-thumbs-up" aria-hidden="true"></i>
