@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,10 +52,16 @@ public class VersionReleaseService {
 				Thread.sleep(new Random().nextInt(600000));
 				executeCommand(name, Arrays.asList("date"));
 				executeCommand(name, Arrays.asList("whoami"));
-				int waitFor = executeCommand(name, Arrays.asList("./nedsy.sh", "-v", name));
+				long currentTimeMillis = System.currentTimeMillis();
+				AtomicInteger waitFor = new AtomicInteger();
+				waitFor.set(executeCommand(name, Arrays.asList("./nedsy.sh", "-v", name)));
+				long end = System.currentTimeMillis() - currentTimeMillis;
+				if (end < 30000) {
+					waitFor.set(executeCommand(name, Arrays.asList("./nedsy.sh", "-v", name)));
+				}
 				txService.run(() -> {
 					Version findByName1 = versionRepo.findByName(name);
-					if (waitFor == 0) {
+					if (waitFor.get() == 0) {
 						voteRepo.deleteAll(voteRepo.findAll(Example.of(new Vote(name))));
 						findByName1.setState(VersionState.SUCCESS);
 					} else {
