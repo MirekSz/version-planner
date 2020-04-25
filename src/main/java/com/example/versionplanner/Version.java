@@ -22,6 +22,8 @@ public class Version {
 	private VersionState state;
 	@Column(nullable = true)
 	private LocalDateTime start;
+	@Column(nullable = true)
+	private Integer counter = 0;
 
 	public Version() {
 
@@ -61,6 +63,15 @@ public class Version {
 
 	public void setStart(final LocalDateTime start) {
 		this.start = start;
+		this.counter++;
+	}
+
+	public Integer getCounter() {
+		return counter;
+	}
+
+	public void setCounter(final Integer counter) {
+		this.counter = counter;
 	}
 
 }
