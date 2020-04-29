@@ -63,6 +63,9 @@ public class Version {
 
 	public void setStart(final LocalDateTime start) {
 		this.start = start;
+		if (this.counter == null) {
+			this.counter = 0;
+		}
 		this.counter++;
 	}
 
