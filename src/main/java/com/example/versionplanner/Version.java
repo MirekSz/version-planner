@@ -24,6 +24,10 @@ public class Version {
 	private LocalDateTime start;
 	@Column(nullable = true)
 	private Integer counter = 0;
+	@Column(nullable = true)
+	private Boolean lastError;
+	@Column(nullable = true)
+	private String releaser;
 
 	public Version() {
 
@@ -55,6 +59,12 @@ public class Version {
 
 	public void setState(final VersionState state) {
 		this.state = state;
+		if (VersionState.ERROR == state) {
+			this.lastError = true;
+		} else if (VersionState.SUCCESS == state) {
+			this.lastError = false;
+			this.releaser = null;
+		}
 	}
 
 	public LocalDateTime getStart() {
@@ -77,4 +87,15 @@ public class Version {
 		this.counter = counter;
 	}
 
+	public Boolean getLastError() {
+		return lastError;
+	}
+
+	public void setReleaser(final String releaser) {
+		this.releaser = releaser;
+	}
+
+	public String getReleaser() {
+		return this.releaser;
+	}
 }

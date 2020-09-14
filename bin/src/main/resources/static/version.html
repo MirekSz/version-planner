@@ -7,11 +7,10 @@
                 <i
                         class="fa fa-spinner  fa-spin" aria-hidden="true" ng-if="$ctrl.data.state == 'RUNNING'"></i>
                 {{$ctrl.data.name}}
-                <span ng-if="$ctrl.data.watchers.length">({{$ctrl.data.watchers.length}})</span>
-                {{$ctrl.data.releaser | trim}}
+                <span ng-if="$ctrl.data.watchers.length">  ({{$ctrl.data.watchers.length}})</span>
             </h5>
         </div>
-        <a ng-if="$ctrl.data.lastError == true && $ctrl.data.state != 'RUNNING'" href="#" title="Show error"
+        <a ng-if="$ctrl.data.state == 'ERROR'" href="#" title="Show error"
            ng-click="$event.preventDefault();$ctrl.showError($ctrl.data)"
            class="btn-sm btn-danger align-middle pull-right marg"> <i class="fa  fa-bug" aria-hidden="true"></i>
         </a>
@@ -34,10 +33,7 @@
            ng-click="$event.preventDefault();$ctrl.release($ctrl.data.name)" title="Release"
            class="btn-sm btn-primary align-middle pull-right marg"> <i class="fa  fa-plane" aria-hidden="true"></i>
         </a>
-        <a href="#" ng-if="$ctrl.data.watchers.length>0 && $ctrl.data.state != 'RUNNING' && $ctrl.data.lastError == true"
-           ng-click="$event.preventDefault();$ctrl.release($ctrl.data.name, true)" title="Release without number increasing (fast)"
-           class="btn-sm btn-primary align-middle pull-right marg"> <i class="fa  fa-rocket" aria-hidden="true"></i>
-        </a>
+
 		 <a href="#" ng-if="$ctrl.data.watchers.length==0 && $ctrl.data.role != 'release'"
            ng-click="$event.preventDefault();$ctrl.deleteVersion($ctrl.data.name)" title="Delete version"
            class="btn-sm btn-primary align-middle pull-right marg"> <i class="fa  fa-trash" aria-hidden="true"></i>

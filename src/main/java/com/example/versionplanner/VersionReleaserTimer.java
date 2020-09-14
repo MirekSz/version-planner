@@ -13,7 +13,7 @@ public class VersionReleaserTimer {
 
 	@Scheduled(cron = "0 0 18 * * *")
 	public void run() throws Exception {
-		service.releaseAll();
+		service.releaseAll("system");
 	}
 
 }

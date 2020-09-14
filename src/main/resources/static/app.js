@@ -72,14 +72,14 @@ app.factory('apiService', function ($http) {
             });
         });
     };
-    var releaseVersion = function (version) {
+    var releaseVersion = function (version, fast) {
         return new Promise(function (res, rej) {
-            $http.post('vvp/version/releaseVersion', {version: version}).then(res);
+            $http.post('vvp/version/releaseVersion?user='+localStorage.getItem('user')+"&fast="+(fast===true), {version: version}).then(res);
         });
     };
     var releaseAll = function () {
         return new Promise(function (res, rej) {
-            $http.post('vvp/version/releaseAll').then(res);
+            $http.post('vvp/version/releaseAll?user='+localStorage.getItem('user')).then(res);
         });
     };
     var addVote = function (version, login) {
@@ -128,7 +128,14 @@ app.factory('apiService', function ($http) {
         error
     };
 });
-
+app.filter('trim', function () {
+    return function(value) {
+        if(!angular.isString(value)) {
+            return value;
+        }
+        return value.replace(/^\s+|\s+$/g, '').replace(/\n/g, '').replace(' ', ''); // you could use .trim, but it's not going to work in IE<9
+    };
+});
 app.component('version', {
     templateUrl: 'vvp/version.html',
     controller: function VersionController($scope, apiService) {
@@ -244,9 +251,9 @@ app.controller('versionManager', function ($http, $scope, $timeout, apiService) 
 
     this.avaliable = [];
     this.planned = [];
-    this.releaseVersion = function (version) {
+    this.releaseVersion = function (version, fast) {
         confirm().then(function () {
-            apiService.releaseVersion(version).then(self.reloadVotes);
+            apiService.releaseVersion(version, fast).then(self.reloadVotes);
         });
         return false;
     };

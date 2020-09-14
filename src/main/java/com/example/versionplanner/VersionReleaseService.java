@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.Joiner;
+
 @Service
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
 public class VersionReleaseService {
@@ -36,28 +38,39 @@ public class VersionReleaseService {
 	@Autowired
 	TxService txService;
 
-	public void releaseVersion(final String name) throws Exception {
+	public void releaseVersion(final String name, final String user, final Boolean fast) throws Exception {
 		Version version = versionRepo.findByName(name);
+		Long ver = Long.valueOf(name);
 		if (version.getState() == VersionState.RUNNING) {
 			return;
 		}
+		Boolean lastError = version.getLastError();
 		txService.run(() -> {
 			version.setState(VersionState.RUNNING);
 			version.setStart(LocalDateTime.now());
+			version.setReleaser(user);
 			versionRepo.save(version);
 		});
 
 		new Thread(() -> {
 			try {
+				String increaseNumber = "";
+				if (Boolean.TRUE.equals(lastError) && Boolean.FALSE.equals(fast)) {
+					increaseNumber = "fb";
+				}
+				String command = "./nedsy" + increaseNumber + ".sh";
+				if (ver > 180) {
+					command = command.replace("neds", "neds11");
+				}
 				Thread.sleep(new Random().nextInt(600000));
 				executeCommand(name, Arrays.asList("date"));
 				executeCommand(name, Arrays.asList("whoami"));
 				long currentTimeMillis = System.currentTimeMillis();
 				AtomicInteger waitFor = new AtomicInteger();
-				waitFor.set(executeCommand(name, Arrays.asList("./nedsy.sh", "-v", name)));
+				waitFor.set(executeCommand(name, Arrays.asList(command, "-v", name)));
 				long end = System.currentTimeMillis() - currentTimeMillis;
 				if (end < 30000) {
-					waitFor.set(executeCommand(name, Arrays.asList("./nedsy.sh", "-v", name)));
+					waitFor.set(executeCommand(name, Arrays.asList(command, "-v", name)));
 				}
 				txService.run(() -> {
 					Version findByName1 = versionRepo.findByName(name);
@@ -70,7 +83,7 @@ public class VersionReleaseService {
 					versionRepo.save(findByName1);
 				});
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error(e.getMessage(), e);
 				txService.run(() -> {
 					Version findByName2 = versionRepo.findByName(name);
 					findByName2.setState(VersionState.ERROR);
@@ -81,13 +94,14 @@ public class VersionReleaseService {
 	}
 
 	public static int executeCommand(final String name, final List<String> commands) throws Exception {
+		logger.info(Joiner.on(",").join(commands));
 		ProcessBuilder builder = new ProcessBuilder(commands);
 		// builder.inheritIO();
 
 		builder.directory(new File("/home/neds/VERTO/"));
 		// builder.directory(new File("F:\\Verto2017\\workspace\\server-verto-product"));
-		builder.environment().put("PATH", System.getenv("PATH") + ";" + "/opt/maven/bin;/usr/bin;");
-
+		builder.environment().put("PATH", System.getenv("PATH") + ";" + "/opt/maven/bin;/bin;/sbin;/usr/bin;/usr/local/bin;");
+		builder.environment().putAll(System.getenv());
 		Process exec = builder.start();
 
 		log(name, exec.getErrorStream());
@@ -96,10 +110,10 @@ public class VersionReleaseService {
 		return exec.waitFor();
 	}
 
-	public void releaseAll() throws Exception {
+	public void releaseAll(final String user) throws Exception {
 		List<String> collect = voteRepo.findAll().stream().map(Vote::getVersion).distinct().collect(toList());
 		for (String name : collect) {
-			releaseVersion(name);
+			releaseVersion(name, user, false);
 		}
 	}
 
@@ -117,7 +131,7 @@ public class VersionReleaseService {
 					}
 					reader.close();
 				} catch (final Exception e) {
-					e.printStackTrace();
+					logger.error(e.getMessage(), e);
 				}
 			}
 		};

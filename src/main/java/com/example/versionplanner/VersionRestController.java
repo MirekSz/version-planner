@@ -79,13 +79,14 @@ public class VersionRestController {
 	}
 
 	@PostMapping("/releaseVersion")
-	public void deleteVersion(final @RequestBody @Valid Vote vote) throws Exception {
-		service.releaseVersion(vote.getVersion());
+	public void deleteVersion(final @RequestBody @Valid Vote vote, @RequestParam("user") final String user,
+			@RequestParam("fast") final Boolean fast) throws Exception {
+		service.releaseVersion(vote.getVersion(), user, fast);
 	}
 
 	@PostMapping("/releaseAll")
-	public void deleteAll() throws Exception {
-		service.releaseAll();
+	public void deleteAll(@RequestParam("user") final String user) throws Exception {
+		service.releaseAll(user);
 	}
 
 	private static final class RingBuffer {
