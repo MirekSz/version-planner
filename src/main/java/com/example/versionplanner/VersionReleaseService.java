@@ -127,7 +127,7 @@ public class VersionReleaseService {
 					final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 					String line = null;
 					while ((line = reader.readLine()) != null) {
-						logger.error(line);
+						logger.info(line);
 					}
 					reader.close();
 				} catch (final Exception e) {
